@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: bank-ui-admin
+
+  security:
+    user:
+      name: admin
+      password: admin
+
+server:
+  port: 8001

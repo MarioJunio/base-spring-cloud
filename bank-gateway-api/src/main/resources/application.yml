@@ -1,0 +1,49 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: bank-gateway-api
+  boot:
+    admin:
+      client:
+        url:
+          - http://localhost:8001
+        username: admin
+        password: admin
+  cloud:
+    gateway:
+      default-filters:
+        - AuthTokenGlobalFilter
+      routes:
+        - id: bankApi
+          uri: lb://bank-api
+          predicates:
+            - Path=/bank/**
+          filters:
+            - StripPrefix=1
+            - BankPreFilter
+            - BankPostFilter
+
+        - id: extractApi
+          uri: lb://bank-extract-api
+          predicates:
+            - Path=/extract/**
+          filters:
+            - StripPrefix=1
+            - BankPreFilter
+            - BankPostFilter
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8090/eureka
