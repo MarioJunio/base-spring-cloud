@@ -1,7 +1,9 @@
 package br.com.bank.bankextractapi.adapter.in.web;
 
-import org.springframework.http.server.reactive.ServerHttpResponse;
+import br.com.bank.bankextractapi.application.in.IExtractUseCase;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
@@ -10,12 +12,19 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/extracts")
 public class ExtractController {
 
-    @GetMapping("/period")
-    public Mono<String> periodExtract(ServerHttpResponse response) {
+    private IExtractUseCase extractService;
 
-        response.getHeaders().add("bank-extract-fail", "false");
+    @Autowired
+    public ExtractController(IExtractUseCase extractService) {
+        this.extractService = extractService;
+    }
 
-        Mono<String> data = Mono.just("Resposta do serviço de extrato");
+    @GetMapping("/account/{accountId}")
+    public Mono<String> periodExtract(@PathVariable Long accountId) {
+
+        extractService.extractByAccount(accountId);
+
+        Mono<String> data = Mono.just("Called");
 
         return data;
     }
