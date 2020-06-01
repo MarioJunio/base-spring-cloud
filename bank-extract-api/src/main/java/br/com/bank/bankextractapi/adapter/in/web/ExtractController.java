@@ -1,12 +1,13 @@
 package br.com.bank.bankextractapi.adapter.in.web;
 
 import br.com.bank.bankextractapi.application.in.IExtractUseCase;
+import br.com.bank.bankextractapi.domain.Extract;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/extracts")
@@ -20,12 +21,9 @@ public class ExtractController {
     }
 
     @GetMapping("/account/{accountId}")
-    public Mono<String> periodExtract(@PathVariable Long accountId) {
+    public ResponseEntity<Extract> periodExtract(@PathVariable Long accountId) {
+        Extract extract = extractService.extractByAccount(accountId);
 
-        extractService.extractByAccount(accountId);
-
-        Mono<String> data = Mono.just("Called");
-
-        return data;
+        return ResponseEntity.ok(extract);
     }
 }

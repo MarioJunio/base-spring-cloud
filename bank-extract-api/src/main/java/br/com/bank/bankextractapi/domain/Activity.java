@@ -23,4 +23,8 @@ public class Activity {
     private BigDecimal value;
     private BigDecimal balance;
     private LocalDateTime date;
+
+    public Activity(BigDecimal balance) {
+        this.balance = balance;
+    }
 }
