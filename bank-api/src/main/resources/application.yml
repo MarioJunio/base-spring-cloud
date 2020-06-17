@@ -3,20 +3,32 @@ server:
   error:
     include-stacktrace: on_trace_param
 
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8090/eureka
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
 spring:
   application:
     name: bank-api
 
   datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: jdbc:mysql://localhost:3306/bank?allowPublicKeyRetrieval=true&sslMode=DISABLED
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: bitlyuf
 
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    jmx:
+      enabled: false
 
   jackson:
     locale: pt-BR
@@ -26,10 +38,3 @@ spring:
   h2:
     console:
       enabled: true
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8090/eureka
-  instance:
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
