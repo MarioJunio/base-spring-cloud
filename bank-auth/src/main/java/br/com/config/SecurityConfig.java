@@ -36,22 +36,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        log.info("=> login url: " + jwtConfiguration.getLoginUrl());
-        System.out.println("-> Login URL: " + jwtConfiguration.getLoginUrl());
         http
                 .csrf().disable()
                 .cors().configurationSource(httpServletRequest -> new CorsConfiguration().applyPermitDefaultValues())
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .exceptionHandling().authenticationEntryPoint(new AuthenticationEntryPoint() {
-            @Override
-            public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-                System.out.println("Auth exception: " + authException.getLocalizedMessage());
-                log.info("=> Auth exception: " + authException.getLocalizedMessage());
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-            }
-        })
+                .exceptionHandling().authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED))
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, jwtConfiguration.getLoginUrl()).permitAll()
