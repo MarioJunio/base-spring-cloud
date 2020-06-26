@@ -19,6 +19,7 @@ public class JwtConfiguration {
     private String privateKey;
     private String type;
 
+    @Data
     public static class Header {
         private String name;
         private String prefix;
