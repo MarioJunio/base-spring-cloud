@@ -1,6 +1,5 @@
 package model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,7 +11,6 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class User implements AbstractEntity {
 
     @Id

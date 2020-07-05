@@ -7,6 +7,7 @@ import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import constants.Constants;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -94,8 +95,8 @@ public class AuthToken {
         return new JWTClaimsSet
                 .Builder()
                 .subject(user.getUsername())
-                .claim("userId", user.getId())
-                .claim("authorities", auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                .claim(Constants.JWT_USER_ID_CLAIM, user.getId())
+                .claim(Constants.JWT_AUTHORITIES_CLAIM, auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .issuer("https://www.linkedin.com/in/mario-marques-martins/")
                 .issueTime(new Date())
                 .expirationTime(new Date(System.currentTimeMillis() + (jwtConfiguration.getExpiration() * 1000)))

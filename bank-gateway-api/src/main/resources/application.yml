@@ -4,6 +4,13 @@ server:
 spring:
   application:
     name: bank-gateway-api
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/bank?allowPublicKeyRetrieval=true&sslMode=DISABLED
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: bitlyuf
+
   boot:
     admin:
       client:
@@ -22,8 +29,6 @@ spring:
             - Path=/bank/**
           filters:
             - StripPrefix=1
-            - BankPreFilter
-            - BankPostFilter
 
         - id: extractApi
           uri: lb://bank-extract-api
@@ -31,8 +36,13 @@ spring:
             - Path=/extract/**
           filters:
             - StripPrefix=1
-            - BankPreFilter
-            - BankPostFilter
+
+        - id: authApi
+          uri: lb://bank-auth
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
 
 management:
   endpoint:
@@ -47,3 +57,13 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8090/eureka
+
+jwt:
+  config:
+    loginUrl: /auth/**
+    type: signed
+    expiration: 3600
+    privateKey: qxBEEQv7E8aviX1KUcdOiF5ve5COUPAr
+    header:
+      name: Authorization
+      prefix: Bearer

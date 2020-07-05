@@ -5,9 +5,22 @@ spring:
   application:
     name: bank-extract-api
 
+  datasource:
+    url: jdbc:mysql://localhost:3306/bank?allowPublicKeyRetrieval=true&sslMode=DISABLED
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: bitlyuf
+
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8090/eureka
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+jwt:
+  config:
+    type: signed
+    header:
+      name: Authorization
+      prefix: Bearer
